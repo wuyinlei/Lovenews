@@ -25,6 +25,7 @@ public class GovaffairsPager extends BasePager {
          */
         tvTitle.setText("人口政务");
 
+        setSlidingMenuEnable(true);
 
         TextView textView = new TextView(mActivity);
         textView.setText("人口政务");

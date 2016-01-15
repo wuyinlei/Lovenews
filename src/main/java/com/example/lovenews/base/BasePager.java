@@ -12,9 +12,12 @@ package com.example.lovenews.base;
 import android.app.Activity;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lovenews.R;
+import com.example.lovenews.activity.MainActivity;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 /**
  * 主页面下五个页面的基类
@@ -25,10 +28,10 @@ public class BasePager {
     public Activity mActivity;
     public TextView tvTitle;
     public FrameLayout flContent;
+    public ImageView ivMenu;
 
     public BasePager(Activity activity) {
         this.mActivity = activity;
-
         initViews();
     }
 
@@ -39,6 +42,7 @@ public class BasePager {
         rootView = View.inflate(mActivity, R.layout.base_pager, null);
         tvTitle = (TextView) rootView.findViewById(R.id.tvTitle);
         flContent = (FrameLayout) rootView.findViewById(R.id.fl_content);
+        ivMenu = (ImageView) rootView.findViewById(R.id.ivMenu);
     }
 
     /**
@@ -46,5 +50,22 @@ public class BasePager {
      */
     public void initData() {
 
+    }
+
+    /**
+     * 设置侧边栏干开启和关闭
+     *
+     * @param enable
+     */
+    public void setSlidingMenuEnable(boolean enable){
+        MainActivity mainUi = (MainActivity) mActivity;
+        SlidingMenu slidingMenu = mainUi.getSlidingMenu();
+        //设置slidingmenu不能拉出来
+        slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+        if (enable){
+            slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+        }else {
+            slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+        }
     }
 }

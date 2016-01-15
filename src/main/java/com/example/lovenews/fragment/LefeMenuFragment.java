@@ -18,7 +18,6 @@ public class LefeMenuFragment extends BaseFrament {
     public View initViews() {
         View view = View.inflate(mActivity, R.layout.fragment_left_menu, null);
 
-
         return view;
     }
 }

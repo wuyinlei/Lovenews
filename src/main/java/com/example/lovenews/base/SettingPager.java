@@ -3,6 +3,7 @@ package com.example.lovenews.base;
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.TextView;
 
 /**
@@ -20,11 +21,16 @@ public class SettingPager extends BasePager {
     }
     @Override
     public void initData() {
+        ivMenu.setVisibility(View.GONE);
         /**
          * 这样就可以动态的设置view了
          */
         tvTitle.setText("设置");
 
+        /**
+         * 关闭侧边栏干
+         */
+        setSlidingMenuEnable(false);
 
         TextView textView = new TextView(mActivity);
         textView.setText("设置");

@@ -1,11 +1,10 @@
-package com.example.lovenews.impl;
+package com.example.lovenews.base;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.TextView;
-
-import com.example.lovenews.base.BasePager;
 
 /**
  * Created by 若兰 on 2016/1/15.
@@ -23,11 +22,16 @@ public class HomePager extends BasePager {
 
     @Override
     public void initData() {
+        ivMenu.setVisibility(View.GONE);
         /**
          * 这样就可以动态的设置view了
          */
         tvTitle.setText("爱新闻");
 
+        /**
+         * 关闭侧边栏干
+         */
+        setSlidingMenuEnable(false);
 
         TextView textView = new TextView(mActivity);
         textView.setText("爱新闻");
@@ -35,9 +39,11 @@ public class HomePager extends BasePager {
         textView.setTextColor(Color.RED);
         textView.setGravity(Gravity.CENTER);
         /**
-         * 像framlayout中添加到首页
+         * 像framlayout中添加到首页   这个时候，我们可以添加布局和自己想定义的
          */
         flContent.addView(textView);
 
     }
+
+
 }

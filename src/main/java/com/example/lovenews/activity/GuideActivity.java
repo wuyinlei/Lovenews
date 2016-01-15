@@ -25,11 +25,16 @@ public class GuideActivity extends BaseActivity {
     private ArrayList<ImageView> imageViews;
     private View redPoint;
 
+    /**
+     * 引导页资源数组
+     */
     private static final int[] mImages = new int[]{R.mipmap.guide_1, R.mipmap.guide_2
             , R.mipmap.guide_3};
 
     //小圆点之间的距离
     private int mPointWidth;
+
+    //布局。。。
     private LinearLayout.LayoutParams params;
 
     @Override

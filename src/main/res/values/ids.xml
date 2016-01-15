@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="id" type="id">text_view</item>
+    <item name="rl_root" type="id">rl_root</item>
+    <item name="viewPager" type="id">viewPager</item>
+    <item name="btn_start" type="id">btn_start</item>
+    <item name="ll_point_group" type="id">ll_point_group</item>
+    <item name="redPoint" type="id">redPoint</item>
+</resources>

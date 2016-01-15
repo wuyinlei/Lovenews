@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v4.view.ViewPager
+        android:id="@id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+
+    <RadioGroup
+        android:id="@id/rgGrope"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/bottom_tab_bg"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@id/rbHome"
+            style="@style/RadioButton"
+            android:drawableTop="@drawable/radio_btn_home_selector"
+            android:text="@string/home" />
+
+        <RadioButton
+            android:id="@id/rbNewscenter"
+            style="@style/RadioButton"
+            android:drawableTop="@drawable/radio_btn_newscenter_selector"
+            android:text="@string/newscenter" />
+
+        <RadioButton
+            android:id="@id/rbSmartservice"
+            style="@style/RadioButton"
+            android:drawableTop="@drawable/radio_btn_smartservice_selector"
+            android:text="@string/smartservice" />
+
+        <RadioButton
+            android:id="@id/rbGovaffairs"
+            style="@style/RadioButton"
+            android:drawableTop="@drawable/radio_btn_govaffairs_selector"
+            android:text="@string/app_namegovaffairs" />
+
+        <RadioButton
+            android:id="@id/rbSetting"
+            style="@style/RadioButton"
+            android:drawableTop="@drawable/radio_btn_setting_selector"
+            android:text="@string/setting" />
+    </RadioGroup>
+</LinearLayout>

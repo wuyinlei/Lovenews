@@ -6,4 +6,16 @@
     <item name="btn_start" type="id">btn_start</item>
     <item name="ll_point_group" type="id">ll_point_group</item>
     <item name="redPoint" type="id">redPoint</item>
+    <item name="left_menu" type="id">left_menu</item>
+    <item name="right_content" type="id">right_content</item>
+    <item name="rbHome" type="id">rbHome</item>
+    <item name="rbNewscenter" type="id">rbNewscenter</item>
+    <item name="rbSmartservice" type="id">rbSmartservice</item>
+    <item name="rbGovaffairs" type="id">rbGovaffairs</item>
+    <item name="rbSetting" type="id">rbSetting</item>
+    <item name="rgGrope" type="id">rgGrope</item>
+    <item name="rl_content" type="id">rl_content</item>
+    <item name="tvTitle" type="id">tvTitle</item>
+    <item name="ivMenu" type="id">ivMenu</item>
+    <item name="fl_content" type="id">fl_content</item>
 </resources>

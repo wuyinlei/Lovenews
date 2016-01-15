@@ -8,9 +8,30 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!--铺满全屏的style-->
     <style name="FullScreen" parent="Theme.AppCompat.NoActionBar">
        <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!--背景是白色的，没有ActionBar和Title的-->
+    <style name="FullScreenWhite" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="RadioButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:button">@null</item>
+        <item name="android:drawablePadding">3dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:textColor">@drawable/radio_text_selector_color</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
     </style>
 
 </resources>

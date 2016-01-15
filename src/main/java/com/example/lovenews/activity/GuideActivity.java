@@ -1,16 +1,19 @@
 package com.example.lovenews.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.lovenews.R;
+import com.example.lovenews.utils.PrefUtils;
 
 import java.util.ArrayList;
 
@@ -18,6 +21,7 @@ public class GuideActivity extends BaseActivity {
 
     private ViewPager viewPager;
     private LinearLayout ll_point_group;
+    private Button btn_start;
     private ArrayList<ImageView> imageViews;
     private View redPoint;
 
@@ -45,6 +49,7 @@ public class GuideActivity extends BaseActivity {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         ll_point_group = (LinearLayout) findViewById(R.id.ll_point_group);
         redPoint = findViewById(R.id.redPoint);
+        btn_start = (Button) findViewById(R.id.btn_start);
     }
 
     /**
@@ -171,7 +176,29 @@ public class GuideActivity extends BaseActivity {
          */
         @Override
         public void onPageSelected(int position) {
-
+            if (position == mImages.length - 1) {
+                //当到达了最后一个页面后，显示开始体验的按钮
+                btn_start.setVisibility(View.VISIBLE);
+                btn_start.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //更新sp，表示展示了新手引导页
+                       /* mPres = getSharedPreferences("config", MODE_PRIVATE);
+                        mPres.edit().putBoolean("is_user_guide_showed",true).commit();
+                       */
+                        PrefUtils.setBoolean(GuideActivity.this,"is_user_guide_showed",true);
+                        /**
+                         * 跳转到主界面
+                         */
+                        Intent intent = new Intent(GuideActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+            } else {
+                //否则的话就不显示
+                btn_start.setVisibility(View.INVISIBLE);
+            }
         }
 
         /**
@@ -184,4 +211,6 @@ public class GuideActivity extends BaseActivity {
 
         }
     }
+
+
 }

@@ -100,6 +100,11 @@ public class RightMenuFragment extends BaseFrament {
         mPagerList.add(new GovaffairsPager(mActivity));
         mPagerList.add(new SettingPager(mActivity));
 
+        /**
+         * 在这里手动初始化第一个RadioButton，达到不能切换出侧边栏的效果
+         */
+        mPagerList.get(0).initData();
+
 
         ContentAdapter adapter = new ContentAdapter();
         mViewPager.setAdapter(adapter);
@@ -124,7 +129,7 @@ public class RightMenuFragment extends BaseFrament {
         /**
          * 手动的去初始化首页，要不然自己禁用的SlidingMenu的滑动效果还是有的
          */
-        mPagerList.get(0).initData();
+
     }
 
     /**

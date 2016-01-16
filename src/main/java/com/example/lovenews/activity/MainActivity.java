@@ -16,7 +16,7 @@ public class MainActivity extends SlidingFragmentActivity {
 
     /**
      * ctrl + shift + y----->变成小写
-     *
+     * <p/>
      * ctrl + shift + x----->变成大写
      */
     private static final String FRAGMENT_LEFT_MENU = "fragment_left_menu";
@@ -47,15 +47,33 @@ public class MainActivity extends SlidingFragmentActivity {
     /**
      * 初始化fragment，将fragment数据填充给布局文件
      */
-    private void initFragment(){
+    private void initFragment() {
         fm = getSupportFragmentManager();
         FragmentTransaction fmt = fm.beginTransaction();//开启事务
 
         //替换id和fragment   替换FrameLayout   并加入标记
-        fmt.replace(R.id.left_menu,new LefeMenuFragment(),FRAGMENT_LEFT_MENU);
-        fmt.replace(R.id.right_content,new RightMenuFragment(),FRAGMENT_RIGHT_CONTENT);
+        fmt.replace(R.id.left_menu, new LefeMenuFragment(), FRAGMENT_LEFT_MENU);
+        fmt.replace(R.id.right_content, new RightMenuFragment(), FRAGMENT_RIGHT_CONTENT);
         //提交事物
         fmt.commit();
+    }
+
+    /**
+     * 获取侧边栏对象
+     */
+    public LefeMenuFragment getLeftMenuFragmentTag() {
+        FragmentManager fm = getSupportFragmentManager();
+        LefeMenuFragment fragment = (LefeMenuFragment) fm.findFragmentByTag(FRAGMENT_LEFT_MENU);
+        return fragment;
+    }
+
+    /**
+     * 获取主页面对象
+     */
+    public RightMenuFragment getRightFragmentTag() {
+        FragmentManager fm = getSupportFragmentManager();
+        RightMenuFragment fragment = (RightMenuFragment) fm.findFragmentByTag(FRAGMENT_RIGHT_CONTENT);
+        return fragment;
     }
 
 }

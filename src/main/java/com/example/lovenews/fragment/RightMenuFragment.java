@@ -8,11 +8,11 @@ import android.widget.RadioGroup;
 
 import com.example.lovenews.R;
 import com.example.lovenews.base.BasePager;
-import com.example.lovenews.base.GovaffairsPager;
-import com.example.lovenews.base.HomePager;
-import com.example.lovenews.base.NewsCenterPager;
-import com.example.lovenews.base.SettingPager;
-import com.example.lovenews.base.SmartServicePager;
+import com.example.lovenews.base.impl.GovaffairsPager;
+import com.example.lovenews.base.impl.HomePager;
+import com.example.lovenews.base.impl.NewsCenterPager;
+import com.example.lovenews.base.impl.SettingPager;
+import com.example.lovenews.base.impl.SmartServicePager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -130,6 +130,10 @@ public class RightMenuFragment extends BaseFrament {
          * 手动的去初始化首页，要不然自己禁用的SlidingMenu的滑动效果还是有的
          */
 
+    }
+
+    public NewsCenterPager getNewsCenterPager(){
+        return (NewsCenterPager) mPagerList.get(1);
     }
 
     /**

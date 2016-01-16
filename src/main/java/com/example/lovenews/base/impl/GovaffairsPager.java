@@ -1,10 +1,11 @@
-package com.example.lovenews.base;
+package com.example.lovenews.base.impl;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.TextView;
+
+import com.example.lovenews.base.BasePager;
 
 /**
  * Created by 若兰 on 2016/1/15.
@@ -15,25 +16,21 @@ import android.widget.TextView;
  * csdn:http://blog.csdn.net/wuyinlei
  */
 
-public class SettingPager extends BasePager {
-    public SettingPager(Activity activity) {
+public class GovaffairsPager extends BasePager {
+    public GovaffairsPager(Activity activity) {
         super(activity);
     }
     @Override
     public void initData() {
-        ivMenu.setVisibility(View.GONE);
         /**
          * 这样就可以动态的设置view了
          */
-        tvTitle.setText("设置");
+        tvTitle.setText("人口政务");
 
-        /**
-         * 关闭侧边栏干
-         */
-        setSlidingMenuEnable(false);
+        setSlidingMenuEnable(true);
 
         TextView textView = new TextView(mActivity);
-        textView.setText("设置");
+        textView.setText("人口政务");
         textView.setTextSize(25);
         textView.setTextColor(Color.RED);
         textView.setGravity(Gravity.CENTER);

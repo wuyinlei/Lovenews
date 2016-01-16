@@ -1,10 +1,11 @@
-package com.example.lovenews.base;
+package com.example.lovenews.base.impl;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.TextView;
+
+import com.example.lovenews.base.BasePager;
 
 /**
  * Created by 若兰 on 2016/1/15.
@@ -15,35 +16,29 @@ import android.widget.TextView;
  * csdn:http://blog.csdn.net/wuyinlei
  */
 
-public class HomePager extends BasePager {
-    public HomePager(Activity activity) {
+public class SmartServicePager extends BasePager {
+    public SmartServicePager(Activity activity) {
         super(activity);
     }
 
     @Override
     public void initData() {
-        ivMenu.setVisibility(View.GONE);
         /**
          * 这样就可以动态的设置view了
          */
-        tvTitle.setText("爱新闻");
+        tvTitle.setText("智慧服务");
 
-        /**
-         * 关闭侧边栏干
-         */
-        setSlidingMenuEnable(false);
+        setSlidingMenuEnable(true);
 
         TextView textView = new TextView(mActivity);
-        textView.setText("爱新闻");
+        textView.setText("智慧服务");
         textView.setTextSize(25);
         textView.setTextColor(Color.RED);
         textView.setGravity(Gravity.CENTER);
         /**
-         * 像framlayout中添加到首页   这个时候，我们可以添加布局和自己想定义的
+         * 像framlayout中添加到首页
          */
         flContent.addView(textView);
 
     }
-
-
 }

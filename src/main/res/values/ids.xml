@@ -18,4 +18,5 @@
     <item name="tvTitle" type="id">tvTitle</item>
     <item name="ivMenu" type="id">ivMenu</item>
     <item name="fl_content" type="id">fl_content</item>
+    <item name="lv_list" type="id">lv_list</item>
 </resources>

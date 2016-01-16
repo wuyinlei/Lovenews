@@ -1,20 +1,30 @@
-package com.example.lovenews.base;
+package com.example.lovenews.base.impl;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lovenews.activity.MainActivity;
+import com.example.lovenews.base.BaseMenuDetailPager;
+import com.example.lovenews.base.BasePager;
+import com.example.lovenews.base.menudetail.InteractMenuDetailPager;
+import com.example.lovenews.base.menudetail.NewsMenuDetailPager;
+import com.example.lovenews.base.menudetail.PhotoMenuDetailPager;
+import com.example.lovenews.base.menudetail.TopicMenuDetailPager;
 import com.example.lovenews.bean.NewsData;
 import com.example.lovenews.contants.Contants;
+import com.example.lovenews.fragment.LefeMenuFragment;
 import com.google.gson.Gson;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 若兰 on 2016/1/15.
@@ -26,6 +36,9 @@ import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
  */
 
 public class NewsCenterPager extends BasePager {
+
+    private List<BaseMenuDetailPager> mDetailPagers;  //4个详情菜单的集合
+
     public NewsCenterPager(Activity activity) {
         super(activity);
     }
@@ -92,6 +105,29 @@ public class NewsCenterPager extends BasePager {
     private void parseData(String result) {
         Gson gson = new Gson();
         NewsData newsData = gson.fromJson(result, NewsData.class);
-        Log.d("NewsCenterPager", "newsData:" + newsData);
+       // Log.d("NewsCenterPager", "newsData:" + newsData);
+
+        //刷新侧边栏数据
+        MainActivity mainUi = (MainActivity) mActivity;
+        LefeMenuFragment lefeMenuFragment = mainUi.getLeftMenuFragmentTag();
+        lefeMenuFragment.setMenuData(newsData);
+
+        /**
+         * 四个菜单详情页
+         */
+        mDetailPagers = new ArrayList<>();
+        mDetailPagers.add(new NewsMenuDetailPager(mActivity));
+        mDetailPagers.add(new TopicMenuDetailPager(mActivity));
+        mDetailPagers.add(new PhotoMenuDetailPager(mActivity));
+        mDetailPagers.add(new InteractMenuDetailPager(mActivity));
+    }
+
+    /**
+     * 设置当前菜单详情页
+     */
+    public void setCurrentMenuDetailPager(int position){
+        BaseMenuDetailPager pager = mDetailPagers.get(position);
+        flContent.removeAllViews();//清除之前依附在framelayout上面的页面
+        flContent.addView(pager.mRootView); // 将当前要显示的菜单详情页布局文件设置给framelayout
     }
 }

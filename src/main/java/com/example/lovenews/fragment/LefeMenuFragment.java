@@ -78,9 +78,9 @@ public class LefeMenuFragment extends BaseFrament {
     private void setCurrentMenuDetailPager(int position) {
         MainActivity mainUi = (MainActivity) mActivity;
         //获取主页面fragment
-        RightMenuFragment rightMenuFragment = mainUi.getRightFragmentTag();
+        ContentFragment contentFragment = mainUi.getRightFragmentTag();
         //获取新闻中心页面
-        NewsCenterPager centerPager = rightMenuFragment.getNewsCenterPager();
+        NewsCenterPager centerPager = contentFragment.getNewsCenterPager();
         //获取当前详情页
         centerPager.setCurrentMenuDetailPager(position);
     }
@@ -93,7 +93,6 @@ public class LefeMenuFragment extends BaseFrament {
         mMenuLists = newsData.data;
         mMenuAdapter = new MenuAdapter();
         lv_list.setAdapter(mMenuAdapter);
-
 
     }
 

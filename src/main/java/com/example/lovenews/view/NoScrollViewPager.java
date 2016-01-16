@@ -40,4 +40,14 @@ public class NoScrollViewPager extends ViewPager {
         //返回fasle就可以
         return false;
     }
+
+    /**
+     * 表示事件是否拦截    返回false表示不拦截
+     * @param ev
+     * @return
+     */
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return false;
+    }
 }

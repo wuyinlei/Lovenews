@@ -23,7 +23,8 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@style/FullScreenWhite" />
+            android:theme="@style/Theme.PageIndicatorDefaults"
+            />
     </application>
 
 </manifest>

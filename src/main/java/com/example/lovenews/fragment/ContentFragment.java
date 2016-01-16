@@ -28,7 +28,7 @@ import java.util.List;
  * csdn:http://blog.csdn.net/wuyinlei
  */
 
-public class RightMenuFragment extends BaseFrament {
+public class ContentFragment extends BaseFrament {
 
     @ViewInject(R.id.rgGrope)
     private RadioGroup rgGroup;

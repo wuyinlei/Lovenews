@@ -3,10 +3,11 @@ package com.example.lovenews.activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Window;
 
 import com.example.lovenews.R;
 import com.example.lovenews.fragment.LefeMenuFragment;
-import com.example.lovenews.fragment.RightMenuFragment;
+import com.example.lovenews.fragment.ContentFragment;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
@@ -27,6 +28,7 @@ public class MainActivity extends SlidingFragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
         //设置侧边栏
@@ -53,7 +55,7 @@ public class MainActivity extends SlidingFragmentActivity {
 
         //替换id和fragment   替换FrameLayout   并加入标记
         fmt.replace(R.id.left_menu, new LefeMenuFragment(), FRAGMENT_LEFT_MENU);
-        fmt.replace(R.id.right_content, new RightMenuFragment(), FRAGMENT_RIGHT_CONTENT);
+        fmt.replace(R.id.right_content, new ContentFragment(), FRAGMENT_RIGHT_CONTENT);
         //提交事物
         fmt.commit();
     }
@@ -70,9 +72,9 @@ public class MainActivity extends SlidingFragmentActivity {
     /**
      * 获取主页面对象
      */
-    public RightMenuFragment getRightFragmentTag() {
+    public ContentFragment getRightFragmentTag() {
         FragmentManager fm = getSupportFragmentManager();
-        RightMenuFragment fragment = (RightMenuFragment) fm.findFragmentByTag(FRAGMENT_RIGHT_CONTENT);
+        ContentFragment fragment = (ContentFragment) fm.findFragmentByTag(FRAGMENT_RIGHT_CONTENT);
         return fragment;
     }
 

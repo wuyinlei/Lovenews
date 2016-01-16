@@ -43,6 +43,22 @@ public class BasePager {
         tvTitle = (TextView) rootView.findViewById(R.id.tvTitle);
         flContent = (FrameLayout) rootView.findViewById(R.id.fl_content);
         ivMenu = (ImageView) rootView.findViewById(R.id.ivMenu);
+        ivMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleSlidingMenu();
+            }
+        });
+    }
+
+    /**
+     * 切换SlidingMenu的状态
+     * 表示是不是要显示SlidingMenu
+     */
+    public void toggleSlidingMenu() {
+        MainActivity mainUi = (MainActivity) mActivity;
+        SlidingMenu slidingMenu = mainUi.getSlidingMenu();
+        slidingMenu.toggle();    //切换状态   显示的时候隐藏，影藏是显示
     }
 
     /**

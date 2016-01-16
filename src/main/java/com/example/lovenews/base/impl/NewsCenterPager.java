@@ -1,9 +1,6 @@
 package com.example.lovenews.base.impl;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.view.Gravity;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lovenews.activity.MainActivity;
@@ -38,6 +35,7 @@ import java.util.List;
 public class NewsCenterPager extends BasePager {
 
     private List<BaseMenuDetailPager> mDetailPagers;  //4个详情菜单的集合
+    private NewsData mNewsData;
 
     public NewsCenterPager(Activity activity) {
         super(activity);
@@ -48,20 +46,13 @@ public class NewsCenterPager extends BasePager {
         /**
          * 这样就可以动态的设置view了
          */
-        tvTitle.setText("新闻中心");
+        //tvTitle.setText("新闻中心");
 
         setSlidingMenuEnable(true);
 
         getDataFromService();
-        TextView textView = new TextView(mActivity);
-        textView.setText("新闻中心");
-        textView.setTextSize(25);
-        textView.setTextColor(Color.RED);
-        textView.setGravity(Gravity.CENTER);
-        /**
-         * 像framlayout中添加到首页
-         */
-        flContent.addView(textView);
+
+
 
 
 
@@ -104,13 +95,13 @@ public class NewsCenterPager extends BasePager {
      */
     private void parseData(String result) {
         Gson gson = new Gson();
-        NewsData newsData = gson.fromJson(result, NewsData.class);
-       // Log.d("NewsCenterPager", "newsData:" + newsData);
+        mNewsData = gson.fromJson(result, NewsData.class);
+        // Log.d("NewsCenterPager", "newsData:" + newsData);
 
         //刷新侧边栏数据
         MainActivity mainUi = (MainActivity) mActivity;
         LefeMenuFragment lefeMenuFragment = mainUi.getLeftMenuFragmentTag();
-        lefeMenuFragment.setMenuData(newsData);
+        lefeMenuFragment.setMenuData(mNewsData);
 
         /**
          * 四个菜单详情页
@@ -120,6 +111,9 @@ public class NewsCenterPager extends BasePager {
         mDetailPagers.add(new TopicMenuDetailPager(mActivity));
         mDetailPagers.add(new PhotoMenuDetailPager(mActivity));
         mDetailPagers.add(new InteractMenuDetailPager(mActivity));
+
+        //设置菜单详情页----新闻为默认当前页
+        setCurrentMenuDetailPager(0);
     }
 
     /**
@@ -129,5 +123,9 @@ public class NewsCenterPager extends BasePager {
         BaseMenuDetailPager pager = mDetailPagers.get(position);
         flContent.removeAllViews();//清除之前依附在framelayout上面的页面
         flContent.addView(pager.mRootView); // 将当前要显示的菜单详情页布局文件设置给framelayout
+
+        //设置当前页的标题
+        NewsData.NewsMenuData newsMenuData = mNewsData.data.get(position);
+        tvTitle.setText(newsMenuData.title);
     }
 }

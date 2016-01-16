@@ -11,6 +11,7 @@ import com.example.lovenews.R;
 import com.example.lovenews.activity.MainActivity;
 import com.example.lovenews.base.impl.NewsCenterPager;
 import com.example.lovenews.bean.NewsData;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -50,8 +51,23 @@ public class LefeMenuFragment extends BaseFrament {
                 mCurrentPos = position;
                 mMenuAdapter.notifyDataSetChanged();
                 setCurrentMenuDetailPager(position);
+
+                /**
+                 * 隐藏SlidingMenu
+                 */
+                toggleSlidingMenu();
             }
         });
+    }
+
+    /**
+     * 切换SlidingMenu的状态
+     * 表示是不是要显示SlidingMenu
+     */
+    public void toggleSlidingMenu() {
+        MainActivity mainUi = (MainActivity) mActivity;
+        SlidingMenu slidingMenu = mainUi.getSlidingMenu();
+        slidingMenu.toggle();    //切换状态   显示的时候隐藏，影藏是显示
     }
 
     /**

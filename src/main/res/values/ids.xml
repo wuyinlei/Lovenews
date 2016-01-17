@@ -23,4 +23,8 @@
     <item name="iv_next" type="id">iv_next</item>
     <item name="ivImage" type="id">ivImage</item>
     <item name="tvData" type="id">tvData</item>
+    <item name="ivShare" type="id">ivShare</item>
+    <item name="tvSize" type="id">tvSize</item>
+    <item name="ivBack" type="id">ivBack</item>
+    <item name="webView" type="id">webView</item>
 </resources>

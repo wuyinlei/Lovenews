@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -26,7 +27,7 @@ import java.util.Date;
  * csdn:http://blog.csdn.net/wuyinlei
  */
 
-public class RefreshListView extends ListView implements AbsListView.OnScrollListener {
+public class RefreshListView extends ListView implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
 
     /**
      * 下拉刷新
@@ -258,6 +259,7 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
         mListener = listener;
     }
 
+
     /**
      * 下拉刷新和上拉加载更多接口
      */
@@ -353,5 +355,24 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
 
     }
 
+    OnItemClickListener mItemClickListener;
+
+    @Override
+    public void setOnItemClickListener(OnItemClickListener listener) {
+
+        /**
+         * 把当前的mItemClickListener传递到底层，重写
+         */
+        super.setOnItemClickListener(this);
+        mItemClickListener = listener;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (mItemClickListener !=null){
+            //减去两个头布局getHeaderViewsCount()
+            mItemClickListener.onItemClick(parent,view,position - getHeaderViewsCount(),id);
+        }
+    }
 
 }

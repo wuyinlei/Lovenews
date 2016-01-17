@@ -1,20 +1,25 @@
 package com.example.lovenews.base;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lovenews.R;
+import com.example.lovenews.activity.NewsDetailActivity;
 import com.example.lovenews.bean.NewsData;
 import com.example.lovenews.bean.TabData;
 import com.example.lovenews.contants.Contants;
+import com.example.lovenews.utils.PrefUtils;
 import com.example.lovenews.view.RefreshListView;
 import com.example.lovenews.view.TopNewsViewPager;
 import com.google.gson.Gson;
@@ -72,6 +77,7 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
     private List<TabData.TabNewsData> mNewsDataList;
     private String mMoreUrl;
     private NewsAdapter adapter;
+    private String mRead_ids;
 
     public TabDetailPager(Activity activity, NewsData.NewsTabData newsTabData) {
         super(activity);
@@ -122,7 +128,52 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
                 }
             }
         });
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Toast.makeText(mActivity, "position:" + position, Toast.LENGTH_SHORT).show();
+
+                /**
+                 * 每个新闻都有一个id，我们记录id，然后就能设置已读和未读
+                 *
+                 * 3222,22511,5541,44515,45414
+                 */
+
+                mRead_ids = PrefUtils.getString(mActivity, "read_ids", "");
+                String ids = mNewsDataList.get(position).id;
+                /**
+                 * 在本地记录是否阅读了新闻
+                 *
+                 * 如果包含了不加
+                 */
+                if (!mRead_ids.contains(ids)) {
+                    mRead_ids = mRead_ids + ids + ",";
+                    PrefUtils.setString(mActivity, "read_ids", mRead_ids);
+                }
+                //实现局部界面刷新   view---->被点击的item的对象
+                changeReadState(view);
+                //adapter.notifyDataSetChanged();
+
+                /**
+                 * 跳转到新闻详情页面
+                 */
+                Intent intent = new Intent(mActivity, NewsDetailActivity.class);
+                intent.putExtra("url",mNewsDataList.get(position).url);
+                mActivity.startActivity(intent);
+
+            }
+        });
+
         return view;
+    }
+
+    /**
+     * 改变已经读的颜色
+     */
+    private void changeReadState(View view){
+        TextView tvTitle = (TextView) view.findViewById(R.id.tvTitle);
+        tvTitle.setTextColor(Color.GRAY);
     }
 
     /**
@@ -329,6 +380,8 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
             adapter = new NewsAdapter();
             mListView.setAdapter(adapter);
         }
+
+
     }
 
     /**
@@ -402,6 +455,13 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
             holder.mTvData.setText(item.pubdate);
             mBitmapUtils.display(holder.mIvImage, item.listimage);
             holder.mTvTitle.setText(item.title);
+
+            mRead_ids = PrefUtils.getString(mActivity, "read_ids", "");
+            if (mRead_ids.contains(getItem(position).id)){
+                holder.mTvTitle.setTextColor(Color.GRAY);
+            } else {
+                holder.mTvTitle.setTextColor(Color.BLACK);
+            }
 
             return convertView;
         }

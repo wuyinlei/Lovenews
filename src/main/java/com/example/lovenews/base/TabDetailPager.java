@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +14,7 @@ import com.example.lovenews.R;
 import com.example.lovenews.bean.NewsData;
 import com.example.lovenews.bean.TabData;
 import com.example.lovenews.contants.Contants;
+import com.example.lovenews.view.RefreshListView;
 import com.example.lovenews.view.TopNewsViewPager;
 import com.google.gson.Gson;
 import com.lidroid.xutils.BitmapUtils;
@@ -65,7 +65,7 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
     private TextView mTextView;
 
     @ViewInject(R.id.lv_list)
-    private ListView mListView;
+    private RefreshListView mListView;
 
     private List<TabData.TopNewsData> mTopnews;
     private List<TabData.TabNewsData> mNewsDataList;
@@ -90,6 +90,16 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
 
         //将头条新闻以头布局的相识加给listview
         mListView.addHeaderView(headerView);
+
+        /**
+         * 设置下拉刷新的事件监听
+         */
+        mListView.setOnRefreshListener(new RefreshListView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getDataFromServer();
+            }
+        });
         return view;
     }
 
@@ -180,6 +190,8 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
                 //System.out.println("返回结果:" + result);
                 //Log.d("TabDetailPager", "页签详情页" + result);
                 parseData(result);
+
+                mListView.OnRefreshComplete(true);
             }
 
             @Override
@@ -187,6 +199,7 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
                 Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT)
                         .show();
                 error.printStackTrace();
+                mListView.OnRefreshComplete(false);
             }
         });
     }

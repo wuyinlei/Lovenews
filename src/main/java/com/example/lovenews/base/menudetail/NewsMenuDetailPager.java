@@ -118,6 +118,8 @@ public class NewsMenuDetailPager extends BaseMenuDetailPager implements ViewPage
     public void onPageSelected(int position) {
         MainActivity mainUi = (MainActivity) mActivity;
         SlidingMenu slidingMenu = mainUi.getSlidingMenu();
+
+        //只有在第一个页面，北京这个页面，侧边栏才能出来
         if (position == 0) {
             slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
         } else {

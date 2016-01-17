@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="125dp"
+                android:layout_height="130dp"
                 android:padding="10dp">
 
     <ImageView
@@ -9,6 +9,7 @@
         android:layout_width="180dp"
         android:scaleType="fitXY"
         android:padding="1dp"
+        android:foregroundGravity="center"
         android:background="@android:color/darker_gray"
         android:layout_height="100dp"
         android:src="@mipmap/image_demo"/>
@@ -32,8 +33,10 @@
         android:layout_height="wrap_content"
         android:text="2016-01-17 13:20"
         android:layout_marginLeft="10dp"
+        android:layout_marginBottom="25dp"
         android:layout_toRightOf="@id/ivImage"
 
         android:layout_alignParentBottom="true"
         android:textSize="18dp"/>
+
 </RelativeLayout>

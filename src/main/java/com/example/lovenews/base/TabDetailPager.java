@@ -3,6 +3,7 @@ package com.example.lovenews.base;
 import android.app.Activity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -69,10 +70,14 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
 
     private List<TabData.TopNewsData> mTopnews;
     private List<TabData.TabNewsData> mNewsDataList;
+    private String mMoreUrl;
+    private NewsAdapter adapter;
 
     public TabDetailPager(Activity activity, NewsData.NewsTabData newsTabData) {
         super(activity);
         mTabData = newsTabData;
+
+        //初始化地址
         mUrl = Contants.BASE_URL + mTabData.url;
     }
 
@@ -83,10 +88,10 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
         /**
          * 加载头布局
          */
-        View headerView = View.inflate(mActivity,R.layout.list_header_top_news,null);
+        View headerView = View.inflate(mActivity, R.layout.list_header_top_news, null);
         //注解
         ViewUtils.inject(this, view);
-        ViewUtils.inject(this,headerView);
+        ViewUtils.inject(this, headerView);
 
         //将头条新闻以头布局的相识加给listview
         mListView.addHeaderView(headerView);
@@ -95,9 +100,26 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
          * 设置下拉刷新的事件监听
          */
         mListView.setOnRefreshListener(new RefreshListView.OnRefreshListener() {
+
+            /**
+             * 下拉刷新
+             */
             @Override
             public void onRefresh() {
                 getDataFromServer();
+            }
+
+            /**
+             * 上拉加载更多
+             */
+            @Override
+            public void onLoadMore() {
+                if (mMoreUrl != null) {
+                    getMoreDataFromServer();
+                } else {
+                    Toast.makeText(mActivity, "已经是最后一页了", Toast.LENGTH_SHORT).show();
+                    mListView.OnRefreshComplete(false);  //收起脚部局
+                }
             }
         });
         return view;
@@ -189,7 +211,7 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
                 String result = (String) responseInfo.result;
                 //System.out.println("返回结果:" + result);
                 //Log.d("TabDetailPager", "页签详情页" + result);
-                parseData(result);
+                parseData(result, false);
 
                 mListView.OnRefreshComplete(true);
             }
@@ -205,18 +227,96 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
     }
 
     /**
+     * 请求服务器数据
+     *
+     * 请求更多数据
+     */
+    private void getMoreDataFromServer() {
+
+        HttpUtils utils = new HttpUtils();
+
+        utils.send(HttpRequest.HttpMethod.GET, mMoreUrl, new RequestCallBack<String>() {
+
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                String result = (String) responseInfo.result;
+                //System.out.println("返回结果:" + result);
+                //Log.d("TabDetailPager", "页签详情页" + result);
+                parseData(result, true);
+
+                mListView.OnRefreshComplete(true);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT)
+                        .show();
+                error.printStackTrace();
+                mListView.OnRefreshComplete(false);
+            }
+        });
+    }
+
+
+    /**
      * 解析数据
      *
-     * @param result
+     * @param result   数据的结果
+     * @param isMore   是否加载更多
      */
-    private void parseData(String result) {
+    private void parseData(String result, boolean isMore) {
         Gson gson = new Gson();
         mFromTabData = gson.fromJson(result, TabData.class);
+
+        /**
+         * 获取到下一页数据的地址
+         */
+        String more = mFromTabData.data.more;
+        /**
+         * 处理更多页面的逻辑
+         */
+        if (!TextUtils.isEmpty(more)) {
+            //地址拼接
+            mMoreUrl = Contants.BASE_URL + more;
+        } else {
+            //否则设置为空
+            mMoreUrl = null;
+        }
         //Log.d("TabDetailPager", "mFromTabData:" + mFromTabData);
 
-        indicatorInit();
+        if (!isMore) {
 
-        initLists();
+           /* mNewsDataList = mFromTabData.data.news;
+            //判断是否为空
+            if (mNewsDataList != null) {
+                adapter = new NewsAdapter();
+                mListView.setAdapter(adapter);
+            }*/
+            initLists();
+
+           /* mTopnews = mFromTabData.data.topnews;
+            //判断是否为空
+            if (mTopnews != null) {
+                mTextView.setText(mTopnews.get(0).title);
+                *//**
+                 * 在拿到数据之后在去设置adapter
+                 *//*
+                mViewPager.setAdapter(new TopNewsAdapter());
+                //mViewPager.setOnPageChangeListener(this);
+                mIndicator.setViewPager(mViewPager);
+                mIndicator.setSnap(true);//快照显示
+                mIndicator.setOnPageChangeListener(this);
+
+                //让指示器重新定位到第一个
+                mIndicator.onPageSelected(0);
+            }*/
+            indicatorInit();
+        } else {
+            //如果是加载下一页，需要将数据追加到集合中
+            List<TabData.TabNewsData> news = mFromTabData.data.news;
+            mNewsDataList.addAll(news);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     /**
@@ -226,7 +326,7 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
         mNewsDataList = mFromTabData.data.news;
         //判断是否为空
         if (mNewsDataList != null) {
-            NewsAdapter adapter = new NewsAdapter();
+            adapter = new NewsAdapter();
             mListView.setAdapter(adapter);
         }
     }
@@ -286,31 +386,32 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
         public View getView(int position, View convertView, ViewGroup parent) {
 
             ViewHolder holder;
-            if (convertView == null){
+
+            //view的复用
+            if (convertView == null) {
                 holder = new ViewHolder();
-                convertView = View.inflate(mActivity,R.layout.list_news_item,null);
+                convertView = View.inflate(mActivity, R.layout.list_news_item, null);
                 holder.mIvImage = (ImageView) convertView.findViewById(R.id.ivImage);
                 holder.mTvData = (TextView) convertView.findViewById(R.id.tvData);
                 holder.mTvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
                 convertView.setTag(holder);
-            } else{
+            } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             TabData.TabNewsData item = getItem(position);
             holder.mTvData.setText(item.pubdate);
-            mBitmapUtils.display(holder.mIvImage,item.listimage);
+            mBitmapUtils.display(holder.mIvImage, item.listimage);
             holder.mTvTitle.setText(item.title);
 
             return convertView;
         }
     }
 
-    static class ViewHolder{
+    static class ViewHolder {
         private TextView mTvTitle;
         private TextView mTvData;
         private ImageView mIvImage;
     }
-
 
 
 }

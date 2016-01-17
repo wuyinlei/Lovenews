@@ -2,14 +2,18 @@ package com.example.lovenews.base.menudetail;
 
 import android.app.Activity;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.lovenews.R;
 import com.example.lovenews.base.BaseMenuDetailPager;
 import com.example.lovenews.base.TabDetailPager;
 import com.example.lovenews.bean.NewsData;
+import com.example.lovenews.view.HorizontalViewPager;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
@@ -29,8 +33,11 @@ import java.util.List;
  */
 public class NewsMenuDetailPager extends BaseMenuDetailPager {
 
-    private ViewPager mViewPager;
+    private HorizontalViewPager mViewPager;
     private TabPageIndicator mIndicator;
+
+    @ViewInject(R.id.iv_next)
+    private ImageView iv_next;
 
     private List<TabDetailPager> mPagerList;
 
@@ -47,8 +54,9 @@ public class NewsMenuDetailPager extends BaseMenuDetailPager {
     @Override
     public View initViews() {
 
-        View view = View.inflate(mActivity, R.layout.menu_news_center_details,null);
-        mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        View view = View.inflate(mActivity, R.layout.menu_news_center_details, null);
+        mViewPager = (HorizontalViewPager) view.findViewById(R.id.viewPager);
+        ViewUtils.inject(this, view);
 
         /**
          * 初始化TabPageIndicator
@@ -57,6 +65,15 @@ public class NewsMenuDetailPager extends BaseMenuDetailPager {
 
 
         return view;
+    }
+
+    /**
+     * 跳转到下一个页面
+     */
+    @OnClick(R.id.iv_next)
+    public void nextPage(View view){
+        int currentItem = mViewPager.getCurrentItem();
+        mViewPager.setCurrentItem(++currentItem);
     }
 
     @Override

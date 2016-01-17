@@ -20,4 +20,5 @@
     <item name="fl_content" type="id">fl_content</item>
     <item name="lv_list" type="id">lv_list</item>
     <item name="indicator" type="id">indicator</item>
+    <item name="iv_next" type="id">iv_next</item>
 </resources>

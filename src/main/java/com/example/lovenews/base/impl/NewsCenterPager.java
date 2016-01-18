@@ -1,6 +1,7 @@
 package com.example.lovenews.base.impl;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.example.lovenews.activity.MainActivity;
@@ -13,6 +14,7 @@ import com.example.lovenews.base.menudetail.TopicMenuDetailPager;
 import com.example.lovenews.bean.NewsData;
 import com.example.lovenews.contants.Contants;
 import com.example.lovenews.fragment.LefeMenuFragment;
+import com.example.lovenews.utils.CacheUtils;
 import com.google.gson.Gson;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -50,7 +52,17 @@ public class NewsCenterPager extends BasePager {
 
         setSlidingMenuEnable(true);
 
+        /**
+         * 读取缓存
+         */
+        String cache = CacheUtils.getCache(Contants.CATEGORIES_URL, mActivity);
+        if (!TextUtils.isEmpty(cache)){
+            //如果存在缓存，直接解析数据，无需访问网络
+            parseData(cache);
+        }
+        //不管有没有缓存，都去获取最新数据，保证数据最新
         getDataFromService();
+
 
     }
 
@@ -71,6 +83,11 @@ public class NewsCenterPager extends BasePager {
                         String result = (String) responseInfo.result;
                         //System.out.println("返回结果:" + result);
                         parseData(result);
+
+                        /**
+                         * 设置缓存
+                         */
+                        CacheUtils.setCache(Contants.CATEGORIES_URL,result,mActivity);
 
                     }
 

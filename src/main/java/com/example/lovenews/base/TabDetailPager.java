@@ -19,6 +19,7 @@ import com.example.lovenews.activity.NewsDetailActivity;
 import com.example.lovenews.bean.NewsData;
 import com.example.lovenews.bean.TabData;
 import com.example.lovenews.contants.Contants;
+import com.example.lovenews.utils.CacheUtils;
 import com.example.lovenews.utils.PrefUtils;
 import com.example.lovenews.view.RefreshListView;
 import com.example.lovenews.view.TopNewsViewPager;
@@ -182,6 +183,11 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
     @Override
     public void initData() {
         //tvTitle.setText(mTabData.title);
+
+        String cache = CacheUtils.getCache(mUrl, mActivity);
+        if (!TextUtils.isEmpty(cache)){
+            parseData(cache,false);
+        }
         getDataFromServer();
 
 
@@ -265,6 +271,11 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
                 parseData(result, false);
 
                 mListView.OnRefreshComplete(true);
+
+                /**
+                 * 保存缓存
+                 */
+                CacheUtils.setCache(mUrl,result,mActivity);
             }
 
             @Override

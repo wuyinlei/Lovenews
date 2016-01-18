@@ -146,12 +146,10 @@ public class NewsDetailActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ShareSDK.stopSDK(this);
-    }
 
+    /**
+     * 分享逻辑
+     */
     private void showShare() {
 
         OnekeyShare oks = new OnekeyShare();
@@ -221,7 +219,14 @@ public class NewsDetailActivity extends AppCompatActivity {
                 mCurrentItem = mCurrentChooseItem;
             }
         });
-        builder.setNegativeButton("取消",null);
+        builder.setNegativeButton("取消", null);
         builder.show();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ShareSDK.stopSDK(this);
+    }
+
 }

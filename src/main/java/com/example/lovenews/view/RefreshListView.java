@@ -49,7 +49,9 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
      */
     private static int CURRENT_STATE = STATE_PULL_REFRESH;
 
-
+    /**
+     * Y轴坐标
+     */
     private float startY;
 
     /**

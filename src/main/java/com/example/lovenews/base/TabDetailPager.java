@@ -3,6 +3,8 @@ package com.example.lovenews.base;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -79,6 +81,8 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
     private String mMoreUrl;
     private NewsAdapter adapter;
     private String mRead_ids;
+
+    private Handler mHandler;
 
     public TabDetailPager(Activity activity, NewsData.NewsTabData newsTabData) {
         super(activity);
@@ -160,7 +164,7 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
                  * 跳转到新闻详情页面
                  */
                 Intent intent = new Intent(mActivity, NewsDetailActivity.class);
-                intent.putExtra("url",mNewsDataList.get(position).url);
+                intent.putExtra("url", mNewsDataList.get(position).url);
                 mActivity.startActivity(intent);
 
             }
@@ -172,7 +176,7 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
     /**
      * 改变已经读的颜色
      */
-    private void changeReadState(View view){
+    private void changeReadState(View view) {
         TextView tvTitle = (TextView) view.findViewById(R.id.tvTitle);
         tvTitle.setTextColor(Color.GRAY);
     }
@@ -185,8 +189,8 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
         //tvTitle.setText(mTabData.title);
 
         String cache = CacheUtils.getCache(mUrl, mActivity);
-        if (!TextUtils.isEmpty(cache)){
-            parseData(cache,false);
+        if (!TextUtils.isEmpty(cache)) {
+            parseData(cache, false);
         }
         getDataFromServer();
 
@@ -275,7 +279,7 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
                 /**
                  * 保存缓存
                  */
-                CacheUtils.setCache(mUrl,result,mActivity);
+                CacheUtils.setCache(mUrl, result, mActivity);
             }
 
             @Override
@@ -290,7 +294,7 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
 
     /**
      * 请求服务器数据
-     *
+     * <p/>
      * 请求更多数据
      */
     private void getMoreDataFromServer() {
@@ -323,8 +327,8 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
     /**
      * 解析数据
      *
-     * @param result   数据的结果
-     * @param isMore   是否加载更多
+     * @param result 数据的结果
+     * @param isMore 是否加载更多
      */
     private void parseData(String result, boolean isMore) {
         Gson gson = new Gson();
@@ -361,8 +365,8 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
             if (mTopnews != null) {
                 mTextView.setText(mTopnews.get(0).title);
                 *//**
-                 * 在拿到数据之后在去设置adapter
-                 *//*
+             * 在拿到数据之后在去设置adapter
+             *//*
                 mViewPager.setAdapter(new TopNewsAdapter());
                 //mViewPager.setOnPageChangeListener(this);
                 mIndicator.setViewPager(mViewPager);
@@ -373,6 +377,33 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
                 mIndicator.onPageSelected(0);
             }*/
             indicatorInit();
+
+            /**
+             * 自动轮播条显示
+             */
+            if (mHandler == null) {
+                mHandler = new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        super.handleMessage(msg);
+                        int currentItem = mViewPager.getCurrentItem();
+                        if (currentItem < mTopnews.size() - 1) {
+                            currentItem++;
+                        } else {
+                            currentItem = 0;
+                        }
+
+                        //切换到下一个页面
+                        mViewPager.setCurrentItem(currentItem);
+
+                        //继续延时3秒发消息
+                        mHandler.sendEmptyMessageDelayed(0, 3000);
+                    }
+                };
+
+                //延时3秒发消息
+                mHandler.sendEmptyMessageDelayed(0, 3000);
+            }
         } else {
             //如果是加载下一页，需要将数据追加到集合中
             List<TabData.TabNewsData> news = mFromTabData.data.news;
@@ -468,7 +499,7 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
             holder.mTvTitle.setText(item.title);
 
             mRead_ids = PrefUtils.getString(mActivity, "read_ids", "");
-            if (mRead_ids.contains(getItem(position).id)){
+            if (mRead_ids.contains(getItem(position).id)) {
                 holder.mTvTitle.setTextColor(Color.GRAY);
             } else {
                 holder.mTvTitle.setTextColor(Color.BLACK);

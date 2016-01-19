@@ -17,9 +17,8 @@ import com.example.lovenews.base.BaseMenuDetailPager;
 import com.example.lovenews.bean.PhotoData;
 import com.example.lovenews.contants.Contants;
 import com.example.lovenews.utils.CacheUtils;
-import com.example.lovenews.utils.MyBitMapUtils;
+import com.example.lovenews.utils.bitmap.MyBitMapUtils;
 import com.google.gson.Gson;
-import com.lidroid.xutils.BitmapUtils;
 
 import java.io.IOException;
 import java.util.List;

@@ -1,6 +1,10 @@
-package com.example.lovenews.utils;
+package com.example.lovenews.utils.bitmap;
 
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.widget.ImageView;
+
+import com.example.lovenews.R;
 
 /**
  * Created by 若兰 on 2016/1/19.
@@ -17,9 +21,13 @@ import android.widget.ImageView;
 public class MyBitMapUtils {
 
     NetCacheUtils mNetCacheUtils;
+    LocalCacheUtils mLocalCacheUtils;
+    private Bitmap mBitmap;
 
     public MyBitMapUtils(){
-        mNetCacheUtils = new NetCacheUtils();
+        mLocalCacheUtils = new LocalCacheUtils();
+        mNetCacheUtils = new NetCacheUtils(mLocalCacheUtils);
+
     }
 
     /**
@@ -36,12 +44,23 @@ public class MyBitMapUtils {
      */
 
     public void display(ImageView tvImage, String listimage) {
+
+        tvImage.setImageResource(R.mipmap.pic_item_list_default);
+
         //从内存中读取
+
+        mBitmap = mLocalCacheUtils.getBitmapFromLocal(listimage);
+        if (mBitmap !=null){
+            tvImage.setImageBitmap(mBitmap);
+            Log.d("MyBitMapUtils", "从本地读取图片了");
+            return;
+        }
 
         //从本地读取
 
         //从网络中读取
         mNetCacheUtils.getBitmapFormNet(tvImage,listimage);
+
 
     }
 }

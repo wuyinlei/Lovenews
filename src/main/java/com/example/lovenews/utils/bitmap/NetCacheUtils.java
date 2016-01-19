@@ -1,4 +1,4 @@
-package com.example.lovenews.utils;
+package com.example.lovenews.utils.bitmap;
 
 /**
  * Created by 若兰 on 2016/1/19.
@@ -12,6 +12,7 @@ package com.example.lovenews.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.IOException;
@@ -23,6 +24,12 @@ import java.net.URL;
  * 网络缓存
  */
 public class NetCacheUtils {
+
+    LocalCacheUtils mLocalCacheUtils;
+
+    public NetCacheUtils(LocalCacheUtils localCacheUtils) {
+        mLocalCacheUtils = localCacheUtils;
+    }
 
     /**
      * 从网络加载图片
@@ -64,6 +71,7 @@ public class NetCacheUtils {
             ivPic.setTag(url);
 
             Bitmap bitmap = downloadBitmap(url);
+            Log.d("BitmapTask", "从网络读取文件");
             return bitmap;
         }
 
@@ -89,6 +97,8 @@ public class NetCacheUtils {
                 String bindUrl = (String) ivPic.getTag();
                 if (url.equals(bindUrl)) {
                     ivPic.setImageBitmap(bitmap);
+                    //在获取到网络图片之后，把图片保存到本地
+                    mLocalCacheUtils.setBitmapToLocal(url,bitmap);
                 }
             }
         }

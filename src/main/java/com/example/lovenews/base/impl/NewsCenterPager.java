@@ -2,6 +2,7 @@ package com.example.lovenews.base.impl;
 
 import android.app.Activity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -71,6 +72,26 @@ public class NewsCenterPager extends BasePager {
      * 从服务器获取数据
      */
     private void getDataFromService() {
+       /* OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(Contants.CATEGORIES_URL).build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                //parseData(response.body().string());
+                Log.d("NewsCenterPager", response.body().string());
+                parseData(response.body().string());
+
+                *//**
+                 * 设置缓存
+                 *//*
+                CacheUtils.setCache(Contants.CATEGORIES_URL, response.body().string(), mActivity);
+            }
+        });*/
         HttpUtils utils = new HttpUtils();
 
         //String url = "http://192.168.1.100:8080/categories.json";
@@ -83,6 +104,7 @@ public class NewsCenterPager extends BasePager {
                     public void onSuccess(ResponseInfo responseInfo) {
                         String result = (String) responseInfo.result;
                         //System.out.println("返回结果:" + result);
+                        Log.d("NewsCenterPager", result);
                         parseData(result);
 
                         /**

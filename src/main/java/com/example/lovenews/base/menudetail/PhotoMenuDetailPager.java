@@ -1,6 +1,8 @@
 package com.example.lovenews.base.menudetail;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,22 +11,24 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.lovenews.R;
 import com.example.lovenews.base.BaseMenuDetailPager;
 import com.example.lovenews.bean.PhotoData;
 import com.example.lovenews.contants.Contants;
 import com.example.lovenews.utils.CacheUtils;
+import com.example.lovenews.utils.MyBitMapUtils;
 import com.google.gson.Gson;
 import com.lidroid.xutils.BitmapUtils;
-import com.lidroid.xutils.HttpUtils;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.lidroid.xutils.http.client.HttpRequest;
 
+import java.io.IOException;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by 若兰 on 2016/1/16.
@@ -82,6 +86,31 @@ public class PhotoMenuDetailPager extends BaseMenuDetailPager implements View.On
      */
     private void getDataFromServer() {
 
+        new Thread() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder().url(url).build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            String result = response.body().string();
+                            parseData(result);
+                            CacheUtils.setCache(url, result, mActivity);
+                        }
+                    }
+                });
+
+            }
+        }.start();
+
+/*
         HttpUtils utils = new HttpUtils();
         utils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
             @Override
@@ -97,8 +126,8 @@ public class PhotoMenuDetailPager extends BaseMenuDetailPager implements View.On
                 Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
             }
         });
+   */
     }
-
     /**
      * 解析数据
      * @param result
@@ -115,18 +144,33 @@ public class PhotoMenuDetailPager extends BaseMenuDetailPager implements View.On
          */
         mPhotoLists = mPhotoData.data.news;
 
-        /**
-         * 获取的组图列表如果不为空
-         */
-        if (mPhotoLists!=null) {
-            mAdapter = new PhotoAdapter();
+        Message message = Message.obtain();
+        message.obj = mPhotoLists;
+        mHandler.sendMessage(message);
 
-            mListView.setAdapter(mAdapter);
-
-            mGridView.setAdapter(mAdapter);
-        }
 
     }
+
+    /**
+     * 在这里需要异步处理
+     */
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            List<PhotoData.PhotoInfo> mPhotos= (List<PhotoData.PhotoInfo>) msg.obj;
+            /**
+             * 获取的组图列表如果不为空
+             */
+            if (mPhotos!=null) {
+                mAdapter = new PhotoAdapter();
+
+                mListView.setAdapter(mAdapter);
+
+                mGridView.setAdapter(mAdapter);
+            }
+        }
+    };
 
     @Override
     public void onClick(View v) {
@@ -154,11 +198,13 @@ public class PhotoMenuDetailPager extends BaseMenuDetailPager implements View.On
      */
     class PhotoAdapter extends BaseAdapter {
 
-        private BitmapUtils mBitmapUtils;
+        //private BitmapUtils mBitmapUtils;
 
+        private MyBitMapUtils utils;
         public PhotoAdapter() {
-            mBitmapUtils = new BitmapUtils(mActivity);
-            mBitmapUtils.configDefaultLoadingImage(R.mipmap.pic_item_list_default);
+          /*  mBitmapUtils = new BitmapUtils(mActivity);
+            mBitmapUtils.configDefaultLoadingImage(R.mipmap.pic_item_list_default);*/
+            utils = new MyBitMapUtils();
         }
 
         @Override
@@ -192,7 +238,7 @@ public class PhotoMenuDetailPager extends BaseMenuDetailPager implements View.On
 
             PhotoData.PhotoInfo photoInfo = getItem(position);
             holder.tvTitle.setText(photoInfo.title);
-            mBitmapUtils.display(holder.tvImage,photoInfo.listimage);
+            utils.display(holder.tvImage,photoInfo.listimage);
 
             return convertView;
         }

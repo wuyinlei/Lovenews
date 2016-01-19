@@ -13,6 +13,5 @@
             android:centerColor="#3F00"
             android:endColor="#F00"
             android:startColor="#FFF"/>
-
     </shape>
 </rotate>

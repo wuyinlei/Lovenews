@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -114,7 +113,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                 if (newProgress >= 90) {
                     progressBar.setVisibility(View.INVISIBLE);
                 }
-                Log.d("NewsDetailActivity", "newProgress:" + newProgress);
+               // Log.d("NewsDetailActivity", "newProgress:" + newProgress);
             }
 
             /**

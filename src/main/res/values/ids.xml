@@ -27,4 +27,6 @@
     <item name="tvSize" type="id">tvSize</item>
     <item name="ivBack" type="id">ivBack</item>
     <item name="webView" type="id">webView</item>
+    <item name="gv_list" type="id">gv_list</item>
+    <item name="ivPhoto" type="id">ivPhoto</item>
 </resources>

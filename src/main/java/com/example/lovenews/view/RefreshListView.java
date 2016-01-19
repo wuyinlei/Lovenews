@@ -270,6 +270,11 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
         void onLoadMore();
     }
 
+    /**
+     * 加载完成   要隐藏我们的头布局和尾布局
+     *
+     * @param success
+     */
     public void OnRefreshComplete(boolean success) {
 
         if (isLoadingMore){

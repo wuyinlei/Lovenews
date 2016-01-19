@@ -2,6 +2,7 @@ package com.example.lovenews.base.impl;
 
 import android.app.Activity;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.lovenews.activity.MainActivity;
@@ -56,7 +57,7 @@ public class NewsCenterPager extends BasePager {
          * 读取缓存
          */
         String cache = CacheUtils.getCache(Contants.CATEGORIES_URL, mActivity);
-        if (!TextUtils.isEmpty(cache)){
+        if (!TextUtils.isEmpty(cache)) {
             //如果存在缓存，直接解析数据，无需访问网络
             parseData(cache);
         }
@@ -87,7 +88,7 @@ public class NewsCenterPager extends BasePager {
                         /**
                          * 设置缓存
                          */
-                        CacheUtils.setCache(Contants.CATEGORIES_URL,result,mActivity);
+                        CacheUtils.setCache(Contants.CATEGORIES_URL, result, mActivity);
 
                     }
 
@@ -104,6 +105,7 @@ public class NewsCenterPager extends BasePager {
 
     /**
      * 解析json数据
+     *
      * @param result
      */
     private void parseData(String result) {
@@ -120,9 +122,9 @@ public class NewsCenterPager extends BasePager {
          * 四个菜单详情页
          */
         mDetailPagers = new ArrayList<>();
-        mDetailPagers.add(new NewsMenuDetailPager(mActivity,mNewsData.data.get(0).children));
+        mDetailPagers.add(new NewsMenuDetailPager(mActivity, mNewsData.data.get(0).children));
         mDetailPagers.add(new TopicMenuDetailPager(mActivity));
-        mDetailPagers.add(new PhotoMenuDetailPager(mActivity));
+        mDetailPagers.add(new PhotoMenuDetailPager(mActivity,ivPic));
         mDetailPagers.add(new InteractMenuDetailPager(mActivity));
 
         //设置菜单详情页----新闻为默认当前页
@@ -132,7 +134,7 @@ public class NewsCenterPager extends BasePager {
     /**
      * 设置当前菜单详情页
      */
-    public void setCurrentMenuDetailPager(int position){
+    public void setCurrentMenuDetailPager(int position) {
         BaseMenuDetailPager pager = mDetailPagers.get(position);
         flContent.removeAllViews();//清除之前依附在framelayout上面的页面
         flContent.addView(pager.mRootView); // 将当前要显示的菜单详情页布局文件设置给framelayout
@@ -143,5 +145,11 @@ public class NewsCenterPager extends BasePager {
 
         //初始化当前页面的数据
         pager.initData();
+
+        if (pager instanceof PhotoMenuDetailPager) {
+            ivPic.setVisibility(View.VISIBLE);
+        } else {
+            ivPic.setVisibility(View.GONE);
+        }
     }
 }

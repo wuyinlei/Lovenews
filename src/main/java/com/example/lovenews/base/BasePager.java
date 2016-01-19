@@ -28,7 +28,7 @@ public class BasePager {
     public Activity mActivity;
     public TextView tvTitle;
     public FrameLayout flContent;
-    public ImageView ivMenu;
+    public ImageView ivMenu,ivPic;
 
     public BasePager(Activity activity) {
         this.mActivity = activity;
@@ -49,6 +49,7 @@ public class BasePager {
                 toggleSlidingMenu();
             }
         });
+        ivPic = (ImageView) rootView.findViewById(R.id.ivPhoto);
     }
 
     /**

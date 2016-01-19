@@ -22,44 +22,59 @@ public class MyBitMapUtils {
 
     NetCacheUtils mNetCacheUtils;
     LocalCacheUtils mLocalCacheUtils;
-    private Bitmap mBitmap;
+    MemoryCacheUtils mMemoryCacheUtils;
+    private Bitmap mBitmap = null;
 
-    public MyBitMapUtils(){
+    public MyBitMapUtils() {
         mLocalCacheUtils = new LocalCacheUtils();
-        mNetCacheUtils = new NetCacheUtils(mLocalCacheUtils);
+        mMemoryCacheUtils = new MemoryCacheUtils();
+        mNetCacheUtils = new NetCacheUtils(mLocalCacheUtils, mMemoryCacheUtils);
 
     }
 
     /**
      * 三级缓存
-     *
+     * <p/>
      * 内存缓存   优先加载  速度快
-     *
+     * <p/>
      * 本地缓存   次优先加载
-     *
+     * <p/>
      * 网络缓存   不优先加载   速度慢
      *
-     * @param tvImage
-     * @param listimage
+     * @param image
+     * @param url
      */
 
-    public void display(ImageView tvImage, String listimage) {
+    public void display(ImageView image, String url) {
 
-        tvImage.setImageResource(R.mipmap.pic_item_list_default);
+        image.setImageResource(R.mipmap.pic_item_list_default);
 
-        //从内存中读取
-
-        mBitmap = mLocalCacheUtils.getBitmapFromLocal(listimage);
-        if (mBitmap !=null){
-            tvImage.setImageBitmap(mBitmap);
-            Log.d("MyBitMapUtils", "从本地读取图片了");
+        /**
+         *   从内存中读取
+         */
+        mBitmap = mMemoryCacheUtils.getBitmapFromMemory(url);
+        if (mBitmap != null) {
+            image.setImageBitmap(mBitmap);
             return;
         }
 
-        //从本地读取
+        /**
+         * 从本地读取图片
+         */
+        mBitmap = mLocalCacheUtils.getBitmapFromLocal(url);
+        if (mBitmap != null) {
+            image.setImageBitmap(mBitmap);
+            Log.d("MyBitMapUtils", "从本地读取图片了");
+            //将图片保存在内存
+            mMemoryCacheUtils.setBitmapToMemory(url, mBitmap);
+            return;
+        }
 
-        //从网络中读取
-        mNetCacheUtils.getBitmapFormNet(tvImage,listimage);
+
+        /**
+         * 从网络中读取图片
+         */
+        mNetCacheUtils.getBitmapFormNet(image, url);
 
 
     }

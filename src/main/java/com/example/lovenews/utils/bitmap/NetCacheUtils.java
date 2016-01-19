@@ -25,10 +25,13 @@ import java.net.URL;
  */
 public class NetCacheUtils {
 
-    LocalCacheUtils mLocalCacheUtils;
+    private LocalCacheUtils mLocalCacheUtils;
+    private MemoryCacheUtils mMemoryCacheUtils;
 
-    public NetCacheUtils(LocalCacheUtils localCacheUtils) {
+
+    public NetCacheUtils(LocalCacheUtils localCacheUtils, MemoryCacheUtils memoryCacheUtils) {
         mLocalCacheUtils = localCacheUtils;
+        mMemoryCacheUtils = memoryCacheUtils;
     }
 
     /**
@@ -98,7 +101,9 @@ public class NetCacheUtils {
                 if (url.equals(bindUrl)) {
                     ivPic.setImageBitmap(bitmap);
                     //在获取到网络图片之后，把图片保存到本地
-                    mLocalCacheUtils.setBitmapToLocal(url,bitmap);
+                    mLocalCacheUtils.setBitmapToLocal(url, bitmap);
+                    //将图片保存到内存
+                    mMemoryCacheUtils.setBitmapToMemory(url,bitmap);
                 }
             }
         }
